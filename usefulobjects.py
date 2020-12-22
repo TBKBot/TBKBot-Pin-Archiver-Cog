@@ -1,8 +1,9 @@
 import random
 import discord
+import yaml
 
-color = 0x330091
+config = yaml.safe_load("config.yml")
 
 def simplebed(title,text):
-    embedvar = discord.Embed(title=title,description=text,color=color)
+    embedvar = discord.Embed(title=title,description=text,color=config['basecolor'])
     return embedvar
