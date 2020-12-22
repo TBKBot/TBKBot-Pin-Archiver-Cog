@@ -4,10 +4,12 @@ This is just a fix on the original [Pin Archiver](https://github.com/HaiderZaidi
 # Developers
 @antoniokf5 and @DontTreadOnGerman
 
-# Requirements
+# Setup
+If you want to set up the bot for your own usage, that's completely fine! Here are the requirements;
 Python 3.6x 
-
 pip install -r requirements.txt
+
+In order to customize your bot, please go to the **config.yml** file and edit the needed values.
 
 # Disclaimer
 We don't take credit for the original idea and functionality of Pin Archiver.
