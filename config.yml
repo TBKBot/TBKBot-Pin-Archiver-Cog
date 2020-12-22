@@ -3,3 +3,5 @@ originaldevs:
 - 721029142602056328
 prefix: # Place your prefix here!
 token: # Place your token here!
+logchannel: # Place your pin archive channel ID here!
+basecolor: # Place the hex color of what you want the embeds to be here!
