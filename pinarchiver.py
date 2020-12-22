@@ -1,9 +1,10 @@
 import discord
 import datetime
 import usefulobjects
+import yaml
 from discord.ext import commands
 
-basecolor = 0x330091
+config = yaml.safe_load("config.yml")
 
 
 class PinArchiver(commands.Cog):
@@ -23,14 +24,14 @@ class PinArchiver(commands.Cog):
         name = message.author
         avatar = message.author.avatar_url
         pin_content = message.content
-        emb = discord.Embed(color=basecolor, title=f"{name}'s message was pinned!")
+        emb = discord.Embed(color=config['basecolor'], title=f"{name}'s message was pinned!")
         emb.set_thumbnail(url=avatar)
         emb.add_field(name="Message Content", value=pin_content, inline=False)
         emb.add_field(name="Message Channel", value=message.channel, inline=True)
         emb.add_field(name="Time", value=str(datetime.datetime.now()), inline=True)
         if message.attachments:
             emb.set_image(url=f"{message.attachments[0].url}")
-        channel = self.bot.get_channel(# Log channel ID)
+        channel = self.bot.get_channel(config['logchannel'])
         await channel.send(embed=emb)
 
     async def confirm_message(self, after):
@@ -76,10 +77,10 @@ class PinArchiver(commands.Cog):
                     authorid = oldest_pin.author.id
                     channelid = oldest_pin.channel.id
                     content = oldest_pin.content
-                    channel = self.bot.get_channel(# Log channel ID)
+                    channel = self.bot.get_channel(config['logchannel'])
                     embed_var1 = discord.Embed(title=f"Message deleted in #{oldest_pin.channel}",
                                                description=f"<@!{authorid}> had one of their messages automatically unpinned in <#{channelid}>",
-                                               color=0x330091)
+                                               color=config['basecolor'])
                     embed_var1.set_thumbnail(url=author.avatar_url)
                     embed_var1.add_field(name="Message Content", value=f"{content}")
                     embed_var1.add_field(name="Time", value=str(datetime.datetime.now()))
@@ -104,7 +105,7 @@ class PinArchiver(commands.Cog):
             pinned_content = lastpin.content
             attachments = lastpin.attachments
 
-            embed = discord.Embed(color=basecolor, title=f"The last pinned message was from {pinned_name}!")
+            embed = discord.Embed(color=config['basecolor'], title=f"The last pinned message was from {pinned_name}!")
             embed.set_thumbnail(url=pinned_avatar)
             embed.add_field(name="Message Content", value=pinned_content, inline=False)
             embed.add_field(name="Message Channel", value=lastpin.channel, inline=True)
@@ -119,7 +120,6 @@ class PinArchiver(commands.Cog):
         id_to_archive = message
         msg = await ctx.channel.fetch_message(int(id_to_archive))
         pins = await ctx.channel.pins()
-
         if msg in pins:
             await self.archive_message(msg)
             await ctx.send(embed=usefulobjects.simplebed("Message archived successfully!",
@@ -130,7 +130,7 @@ class PinArchiver(commands.Cog):
     @archivepin.error
     async def archive_error(self, ctx, error):
         if isinstance(error, discord.errors.HTTPException):
-            emb = discord.Embed(description='Error: Message not found in #{}, try again.', color=basecolor)
+            emb = discord.Embed(description='Error: Message not found in #{}, try again.', color=config['basecolor'])
             await ctx.send(embed=emb)
 
 def setup(bot):
